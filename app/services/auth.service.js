@@ -13,7 +13,10 @@ class AuthService {
         if (has_token) {
             return {
                 status_code: 400,
-                message: 'You are already logged in'
+                message: 'You are already logged in',
+                data: {
+                    token: has_token
+                }
             }
         }
 
@@ -91,7 +94,10 @@ class AuthService {
         if (has_token) {
             return {
                 status_code: 400,
-                message: 'You are already logged in'
+                message: 'You are already logged in',
+                data: {
+                    token: has_token
+                }
             }
         }
 
