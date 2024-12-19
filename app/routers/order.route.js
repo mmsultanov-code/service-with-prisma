@@ -1,10 +1,11 @@
-const order_routes = require('express').Router();
-const { OrderController } = require('../controllers');
+const order_routes = require('express').Router()
+const { OrderController } = require('../controllers')
+const { authenticationJWT } = require('../middlewares')
 
-order_routes.get('/', OrderController.list);
-order_routes.get('/:id', OrderController.get_by_id);
-order_routes.post('/', OrderController.create);
-order_routes.patch('/:id', OrderController.update);
-order_routes.delete('/:id', OrderController.remove);
+order_routes.get('/', authenticationJWT, OrderController.list)
+order_routes.get('/:id', authenticationJWT, OrderController.get_by_id)
+order_routes.post('/', authenticationJWT, OrderController.create)
+order_routes.patch('/:id', authenticationJWT, OrderController.update)
+order_routes.delete('/:id', authenticationJWT, OrderController.remove)
 
-module.exports = order_routes;
+module.exports = order_routes

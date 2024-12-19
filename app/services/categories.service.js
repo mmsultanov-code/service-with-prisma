@@ -9,7 +9,7 @@ class CategoriesService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async get_by_id(req, res) {
         try {
             await this.check_by_id(req.params.id)
@@ -23,7 +23,7 @@ class CategoriesService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async create(req, res) {
         try {
             const { name } = req.body
@@ -35,7 +35,7 @@ class CategoriesService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async update(req, res) {
         try {
             await this.check_by_id(req.params.id)
@@ -50,7 +50,7 @@ class CategoriesService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async remove(req, res) {
         try {
             await this.check_by_id(req.params.id)
@@ -74,4 +74,4 @@ class CategoriesService {
     }
 }
 
-module.exports = new CategoriesService();
+module.exports = new CategoriesService()

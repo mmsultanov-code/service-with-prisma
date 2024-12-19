@@ -7,7 +7,7 @@ const cors = require('cors')
 app.use(body_parser.json())
 app.use(cors())
 
-app.use(express.json());
+app.use(express.json())
 const { user_routes, categories_routes, product_routes, order_routes, auth_routes } = require('./routers')
 
 app.get('/', (req, res) => {

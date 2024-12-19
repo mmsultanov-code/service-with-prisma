@@ -9,7 +9,7 @@ class ProductService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async get_by_id(req, res) {
         try {
             await this.check_by_id(req.params.id)
@@ -23,9 +23,23 @@ class ProductService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
+    async check_exist_category(category_id) {
+        if (!category_id) {
+            return true
+        }
+        const model_data = await prisma.category.findUnique({
+            where: { id: parseInt(category_id) }
+        })
+        console.log(model_data)
+        if (!model_data) {
+            throw new Error('Category not found')
+        }
+    }
+
     async create(req, res) {
         try {
+            await this.check_exist_category(req.body.categoryId)
             const { name, description, price, categoryId } = req.body
             const model_data = await prisma.product.create({
                 data: { name, description, price, categoryId }
@@ -35,10 +49,11 @@ class ProductService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async update(req, res) {
         try {
             await this.check_by_id(req.params.id)
+            await this.check_exist_category(req.body.categoryId)
             const { id } = req.params
             const { name, description, price, categoryId } = req.body
             const model_data = await prisma.product.update({
@@ -50,7 +65,7 @@ class ProductService {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async remove(req, res) {
         try {
             await this.check_relationship(req.params.id)

@@ -1,15 +1,22 @@
 const prisma = require('./../config/prisma.config')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 class UserService {
+    SECRET_KEY = process.env.ACCESS_TOKEN_SECRET
+    EXPIRES_IN = '1h'
+    SALT_ROUNDS = 10
+
     async list(req, res) {
         try {
             const model_data = await prisma.user.findMany()
+            model_data.map((data) => delete data.password)
             res.json(model_data)
         } catch (error) {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async get_by_id(req, res) {
         try {
             await this.check_by_id(req.params.id)
@@ -18,25 +25,27 @@ class UserService {
                 where: { id: parseInt(id) }
             })
             if (!model_data) return res.status(404).json({ error: 'Data not found' })
+            delete model_data.password
             res.json(model_data)
         } catch (error) {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async create(req, res) {
         try {
-            await this.check_by_email(req.body.email)
             const { name, email, password } = req.body
+            await this.check_by_email(email)
             const model_data = await prisma.user.create({
-                data: { name, email, password }
+                data: { name, email, password: await bcrypt.hash(password, this.SALT_ROUNDS) }
             })
+            delete model_data.password
             res.status(201).json(model_data)
         } catch (error) {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async update(req, res) {
         try {
             await this.check_by_id(req.params.id)
@@ -44,14 +53,15 @@ class UserService {
             const { name, email, password } = req.body
             const model_data = await prisma.user.update({
                 where: { id: parseInt(id) },
-                data: { name, email, password }
+                data: { name, email, password: await bcrypt.hash(password, this.SALT_ROUNDS) }
             })
+            delete model_data.password
             res.json(model_data)
         } catch (error) {
             res.status(500).json({ error: error.message })
         }
     }
-    
+
     async remove(req, res) {
         try {
             await this.check_relationship(req.params.id)
