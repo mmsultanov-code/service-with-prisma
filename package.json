@@ -7,7 +7,8 @@
         "dev": "nodemon app/main.js",
         "format": "prettier --write .",
         "migration:create": "npx prisma migrate dev --name init",
-        "migration:up": "npx prisma migrate dev"
+        "migration:up": "npx prisma migrate dev",
+        "docker-build": "docker-compose up --build"
     },
     "keywords": [],
     "author": "",
@@ -19,7 +20,7 @@
     },
     "dependencies": {
         "@prisma/client": "^6.1.0",
-        "bcrypt": "^5.1.1",
+        "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.3",
         "cors": "^2.8.5",
         "express": "^4.21.2",

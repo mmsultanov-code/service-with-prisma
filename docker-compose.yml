@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://postgres:root@db:5432/food_crud
+      - ACCESS_TOKEN_SECRET=qwidj18jd9821jd98j98jzczxc
+      - MAX_EXPIRES_IN_JWT=7d
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+    restart: always
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: food_crud
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

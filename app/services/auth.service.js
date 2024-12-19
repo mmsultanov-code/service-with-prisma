@@ -1,6 +1,6 @@
 const prisma = require('../config/prisma.config')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 class AuthService {
     SECRET_KEY = process.env.ACCESS_TOKEN_SECRET
